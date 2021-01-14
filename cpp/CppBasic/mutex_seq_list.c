@@ -1,3 +1,7 @@
+// 互斥锁+顺序表
+// 线程从a.txt中读取一个字符写入顺序表
+// 主线程从键盘接收字符写入顺序表
+// 顺序表满后不允许继续写入操作
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
