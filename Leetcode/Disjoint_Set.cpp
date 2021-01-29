@@ -25,7 +25,7 @@ public:
     // 合并两个节点
     // 如果处于同一个并查集， 不需要合并
     // 如果不处于同一个并查集，判断两个rootx和rooty谁的秩大
-    void merge(int x, int y) {
+    bool merge(int x, int y) {
         int rx = find(x);
         int ry = find(y);
         if (rx != ry) {
@@ -33,9 +33,17 @@ public:
                 swap(rx, ry);
             }
             parent[ry] = rx;
+            rank[rx] += rank[ry]
             count--;
-            if (rank[rx] == rank[ry]) rank[x] += 1;
+            return true;
         }
+        return false;
+    }
+    // 判断两个点是否连通
+    bool connected(int x, int y){
+        x = find(x);
+        y = find(y);
+        return x == y;
     }
 };
 
