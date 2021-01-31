@@ -33,7 +33,7 @@ public:
                 swap(rx, ry);
             }
             parent[ry] = rx;
-            rank[rx] += rank[ry]
+            rank[rx] += rank[ry];
             count--;
             return true;
         }
