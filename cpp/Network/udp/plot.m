@@ -1,0 +1,14 @@
+figure;
+packet_size_x = [2000, 4000, 6000, 8000, 10000, 20000, 30000, 40000, 50000, 60000];
+loss_rate_y = [0, 0.02, 0.11, 0.15, 0.17, 0.28, 0.82, 1.35, 3.37, 1.61];
+plot(packet_size_x, loss_rate_y, 'b-*');
+xlabel('packet size/byte');
+ylabel('loss rate/%');
+grid on;
+figure;
+send_delay_x = [1,5,10,15,20,25,40,60,100,200,300,400,500,600,700,800,900,1000,1100,1200];
+loss_rate_y2 = [54.1, 55.21, 58.15, 53.49, 55.46, 54.29, 55.46, 56.02, 56.78, 53.14, 37.87, 27.72, 11.28, 4.15, 1.26, 0.05, 0, 0, 0, 0];
+plot(send_delay_x, loss_rate_y2, 'b-.');
+xlabel('send delay/us');
+ylabel('loss rate/%');
+grid on;
