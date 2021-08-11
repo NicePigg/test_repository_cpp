@@ -1,0 +1,83 @@
+// 34088119480815*663
+// 520123200501169**4
+int main()
+{
+    vector<int> multinum = { 7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2 };
+
+    unordered_map<char, int > ch2ys = { {'1', 0}, { '0',1 }, { 'X',2 }, { '9',3 },
+        { '8',4 }, { '7',5 }, { '6',6 }, { '5',7 }, { '4',8 }, { '3',9 }, { '2',10 } };
+    int T;
+    cin >> T;
+    string str;
+    int len;
+    while (T--)
+    {
+        cin >> str;
+        len = str.size();
+        if (len != 18) continue;
+        int sum = 0;
+        int yushu = ch2ys[str[17]];
+        int cnt = 0;
+        int flag[3] = { 0,0,0 };
+        for (int i = 0; i < 17; i++) {
+            if (str[i] != '*') sum += (str[i] - '0') * multinum[i];
+            else {
+                cnt++;
+                flag[i - 14] = 1;
+            }
+        }
+        // cnt = 1->最大是9  cnt = 2 最大是18 cnt = 3 最大是27
+        int ret = 0;
+        if (cnt == 1) {
+            int xishu = 0;
+            for (int i = 0; i < 3; i++) {
+                if (flag[i] == 1) {
+                    xishu = multinum[i + 14];
+                }
+            }
+            for (int i = 0; i < 10; i++) {
+                if ((sum + i * xishu) % 11 == yushu) {
+                    ret++;
+                }
+            }
+        }
+        else if (cnt == 2) {
+            int x1 = 0, x2 = 0;
+            for (int i = 0; i < 3; i++) {
+                if (flag[i] == 1) {
+                    x1 = multinum[i + 14];
+                    flag[i] = 0;
+                    break;
+                }
+            }
+            for (int i = 0; i < 3; i++) {
+                if (flag[i] == 1) {
+                    x2 = multinum[i + 14];
+                    flag[i] = 0;
+                    break;
+                }
+            }
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if ((sum + i * x1 + j * x2) % 11 == yushu) {
+                        ret++;
+                    }
+                }
+            }
+
+        }
+        else {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    for (int k = 0; k < 10; k++) {
+                        if ((sum + i * multinum[14] + j * multinum[15] + k * multinum[16]) % 11 == yushu) {
+                            ret++;
+                        }
+                    }
+                }
+            }
+        }
+        cout << ret << endl;
+    }
+    return 0;
+}
