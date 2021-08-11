@@ -1,0 +1,85 @@
+vector<vector<int> > mrooms;
+vector<int> mstartPoint;
+vector<int> mendPoint;
+int M;
+int N;
+int minH;
+void dfs(int curH, int pathminH, vector<int> curPoint, vector<vector<int>>& visited)
+{
+    int m = curPoint[0], n = curPoint[1];
+    curH += (mrooms[m][n]);
+    pathminH = min(pathminH, curH);
+    if (curPoint[0] == mendPoint[0] && curPoint[1] == mendPoint[1]) {
+        minH = max(minH, pathminH);
+        return;
+    }
+    vector<int> nxtPoint(2, 0);
+    if (m > 0) { // 往上走
+        if (visited[m - 1][n] == 0)
+        {
+            nxtPoint[0] = m - 1;
+            nxtPoint[1] = n;
+            visited[m - 1][n] = 1;
+            dfs(curH, pathminH, nxtPoint, visited);
+            visited[m - 1][n] = 0;
+        }
+    }
+    if (n > 0) { // 往左走
+        if (visited[m][n - 1] == 0)
+        {
+            nxtPoint[0] = m;
+            nxtPoint[1] = n - 1;
+            visited[m][n - 1] = 1;
+            dfs(curH, pathminH, nxtPoint, visited);
+            visited[m][n - 1] = 0;
+        }
+    }
+    if (n < N - 1) { // 往右走
+        if (visited[m][n + 1] == 0)
+        {
+            nxtPoint[0] = m;
+            nxtPoint[1] = n + 1;
+            visited[m][n + 1] = 1;
+            dfs(curH, pathminH, nxtPoint, visited);
+            visited[m][n + 1] = 0;
+        }
+    }
+    if (m < M - 1) { // 往下走
+        if (visited[m + 1][n] == 0)
+        {
+            nxtPoint[0] = m + 1;
+            nxtPoint[1] = n;
+            visited[m + 1][n] = 1;
+            dfs(curH, pathminH, nxtPoint, visited);
+            visited[m + 1][n] = 0;
+        }
+    }
+    return;
+}
+int minimumInitHealth(vector<vector<int> >& rooms, vector<int>& startPoint, vector<int>& endPoint) {
+    // write code here
+    M = rooms.size();
+    N = rooms[0].size();
+    mrooms = rooms;
+    mstartPoint = startPoint;
+    mendPoint = endPoint;
+
+    vector<vector<int>>  visited(M, vector<int>(N, 0));
+    int startm = startPoint[0], startn = startPoint[1];
+    int curH = 0;
+    int pathminH = 0;
+    visited[startm][startn] = 1;
+    minH = INT_MIN;// 所有路径的最高pathminH
+    dfs(curH, pathminH, startPoint, visited);
+    return minH <= 0 ? (-minH+1) : 1;
+}
+
+int main() {
+    //vector<vector<int> > rooms{ {-2,-3,3},{-5,-10,1},{10,30,-5} };
+    vector<vector<int> > rooms{ {100} };
+    vector<int> startPoint{0,0};
+    vector<int> endPoint{0,0};
+    int k = minimumInitHealth(rooms, startPoint, endPoint);
+    cout << k;
+    return 1;
+}
