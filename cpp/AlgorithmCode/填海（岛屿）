@@ -1,0 +1,86 @@
+//如果边界上是B，则这一片都是陆地，把被陆地围起来的地都标记为陆地
+vector<vector<char>> board{  {'A','A','A','A','A'},
+                             {'A','B','B','B','A'} ,
+                             {'A','A','B','B','A'} ,
+                             {'A','A','A','B','A'} ,
+                             {'A','B','A','A','A'} };
+bool isEdge(int i, int j, int m, int n) {
+    return 0 <= i && i < m && 0 <= j && j < n;
+}
+
+void init(vector<vector<char>>& board, int i, int j, int m, int n)
+{
+    if (!isEdge(i, j, m, n)) {
+        return;
+    }
+    if (board[i][j] == 'A' || board[i][j] == 'C')
+    {
+        return;
+    }
+    dfs(board, i - 1, j, m, n);
+    dfs(board, i + 1, j, m, n);
+    dfs(board, i, j - 1, m, n);
+    dfs(board, i, j + 1, m, n);
+    board[i][j] = 'C';
+    return;
+}
+
+void dfs(vector<vector<char>>& board, int i, int j, int m, int n)
+{
+    if (!isEdge(i, j, m, n)) {
+        return;
+    }
+    if (board[i][j] == 'A' || board[i][j] == 'C')
+    {
+        return;
+    }
+    dfs(board, i - 1, j, m, n);
+    dfs(board, i + 1, j, m, n);
+    dfs(board, i, j - 1, m, n);
+    dfs(board, i, j + 1, m, n);
+    board[i][j] = 'A';
+    return;
+}
+
+vector<vector<char>> changeBoard(vector<vector<char>>& board)
+{
+    int m = board.size();
+    int n = board[0].size();
+    if (m <= 0 || n <= 0) return board;
+
+    for (int i = 0; i < m; i++)
+    {
+        if (board[i][0] == 'B')
+        {
+            init(board, i, 0, m, n);
+        }
+        if (board[i][n-1] == 'B')
+        {
+            init(board, i, n-1, m, n);
+        }
+    }
+
+    for (int j = 0; j < n; j++)
+    {
+        if (board[0][j] == 'B')
+        {
+            init(board, 0, j, m, n);
+        }
+        if (board[m-1][j] == 'B')
+        {
+            init(board, m-1, j, m, n);
+        }
+    }
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (board[i][j] == 'B') {
+                dfs(board, i, j, m, n);
+            }
+        }
+    }
+    return board;
+
+}
