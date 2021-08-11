@@ -1,0 +1,31 @@
+string findMaxHwstr(string str) {
+    int n = str.size();
+    int maxLen = 0;
+    string res = "";
+    if (n < 1) return res;
+    vector<vector<int>> dp(n, vector<int>(n, 0)); // dp[i][j] 从i到j的子串是否为回文子串 0 否 1 是
+    for (int j = 0; j < n; j++) {
+        for (int i = j; i >= 0; i--) {
+            if (i == j) dp[i][j] = 1;
+            else if (j - i == 1) dp[i][j] = (str[i] == str[j]);
+            else {
+                dp[i][j] = ((str[i] == str[j]) && dp[i + 1][j - 1]);
+            }
+            if (dp[i][j] && j - i + 1 > maxLen) {
+                maxLen = j - i + 1;
+                res = str.substr(i, j - i + 1);
+            }
+        }
+    }
+    return res;
+}
+
+int main() {
+
+    // 回文子串 daababacdd
+    string str = "1234";//"daababacdd";
+    string res = findMaxHwstr(str);
+    cout << res << endl;
+
+    return 0;
+}
