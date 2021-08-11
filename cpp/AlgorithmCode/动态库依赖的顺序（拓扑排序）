@@ -1,0 +1,48 @@
+// 
+
+int main()
+{
+    vector<vector<int>> input{ {1,2},{1,4},{2,3} };
+    int n = 0, inputSize = input.size();
+    set<int> mySet;
+    for (int i = 0; i < inputSize; i++) {
+        mySet.insert(input[i][0]);
+        mySet.insert(input[i][1]);
+    }
+    n = mySet.size();
+    map<int, vector<int>> graph;
+    map<int,int> mp;//入度
+    for (int i = 0; i < inputSize; i++)// 邻接矩阵 + 计算入度
+    {
+        int start = input[i][0], end = input[i][1];
+        graph[start].push_back(end);
+        if (mp.count(start) == 0) mp[start] = 0;
+        if (mp.count(end) == 0) mp[end] = 1;
+        else mp[end]++;
+    }
+
+    queue<int> q;
+    for (auto i : mp) {
+        if (i.second == 0) {
+            q.push(i.first);
+        }
+    }
+    vector<int> res;
+    while (!q.empty())
+    {
+        int k = q.front();
+        res.push_back(k);
+        q.pop();
+        for (int i = 0; i < graph[k].size(); i++)
+        {
+            q.push(graph[k][i]);
+        }
+
+    }
+    reverse(res.begin(), res.end());
+    for (int i = 0; i < res.size(); i++) {
+        cout << res[i] << endl;
+    }
+
+    return 0;
+}
