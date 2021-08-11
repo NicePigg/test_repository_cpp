@@ -1,0 +1,60 @@
+int main()
+{
+    int T, N, M;
+    cin >> T;
+    while (T--) {
+        cin >> N >> M;
+        int num, tmp, pre;
+        vector<set<int>> graph(1001);
+        vector<int> cnt(1001, -1);
+        while (M--) { //输入了M行记录
+            cin >> num;
+            cin >> pre;
+            if (cnt[pre] == -1) cnt[pre] = 0;
+            for(int i = 1; i < num; i++) {
+                cin >> tmp;
+                if (cnt[tmp] == -1) cnt[tmp] = 0;
+                if (!graph[pre].count(tmp)) {
+                    graph[pre].insert(tmp);
+                    cnt[tmp]++; //入度+1
+                }
+                pre = tmp;
+            }
+        }
+        queue<int> myque;
+        for (int i = 1; i <= N; i++) {
+            if (cnt[i] == 0)
+                myque.push(i);
+        }
+        if (myque.empty() || myque.size() > 1) {
+            cout << "NO" << endl;
+            continue;
+        }
+        vector<int> res;
+        while (myque.size() == 1) {
+            int head = myque.front();
+            cnt[head] = -1;
+            res.push_back(head);
+            myque.pop();
+            if (graph[head].size()) {
+                for (auto i : graph[head]) {
+                    cnt[i]--;
+                }
+            }
+            for (int i = 1; i <= N; i++) {
+                if (cnt[i] == 0)
+                    myque.push(i);
+            }
+        }
+        if (res.size() == N) {
+            for (int i = 0; i < N; i++) {
+                cout << res[i] << ' ';
+            }
+            cout << endl;
+        }
+        else {
+            cout << "NO" << endl;
+        }
+    }
+    return 0;
+}
