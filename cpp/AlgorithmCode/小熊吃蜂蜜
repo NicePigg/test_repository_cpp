@@ -1,0 +1,61 @@
+
+// 
+int main() {
+    long n, k;
+    cin >> n >> k;
+    vector<long> bottom(n, 0);
+    long total = 0; // 蜂蜜总份数
+    for (long i = 0; i < n; i++) {
+        cin >> bottom[i];
+        total += bottom[i];
+    }
+    if (n == 1) {
+        if (bottom[0] <= k) {
+            cout << 0 << endl;
+        }
+        else {
+            cout << bottom[0]-k << endl;
+        }
+    }
+    else if (total < k) {
+        cout << 0 << endl;
+    }
+    else {
+        vector<long> sum(n, -1);
+        for (long i = 1; i < n; i++) {
+            sum[i] = bottom[i] + bottom[i - 1];
+        }
+        for (long i = 1; i <= k; i++) {
+            auto maxIter = max_element(sum.begin(), sum.end());
+            long maxIndex = maxIter - sum.begin();
+            if (maxIndex == 0) continue;
+            if (maxIndex == 1) {
+                bottom[maxIndex]--;
+                sum[maxIndex]--;
+                if (maxIndex < n - 1)
+                    sum[maxIndex + 1]--;
+            }
+            else if (maxIndex == n - 1) {
+                bottom[maxIndex - 1]--;
+                sum[maxIndex]--;
+                sum[maxIndex - 1]--;
+            }
+            else {
+                long left = sum[maxIndex - 1], right = sum[maxIndex + 1];
+                if (left >= right) {
+                    bottom[maxIndex - 1]--;
+                    sum[maxIndex]--;
+                    sum[maxIndex - 1]--;
+                }
+                else {
+                    bottom[maxIndex]--;
+                    sum[maxIndex]--;
+                    sum[maxIndex + 1]--;
+                }
+            }
+        }
+        auto maxIter = max_element(sum.begin(), sum.end());
+        cout << *maxIter << endl;
+    }
+    return 0;
+}
