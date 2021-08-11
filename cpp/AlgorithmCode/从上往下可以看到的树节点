@@ -1,0 +1,73 @@
+// 树 从上往下看，可以看到的结点
+struct TreeNode {
+    int value;
+    struct TreeNode* left;
+    struct TreeNode* right;
+};
+int GetMaxNumber(struct  TreeNode* root)
+{
+    queue<pair<TreeNode*, int>> que;
+    que.push(make_pair(root,0));
+    int left = 0, right = 0;
+    int res = 0;
+    while (!que.empty())
+    {
+        auto tmp = que.front();
+        que.pop();
+        TreeNode* tmpNode = tmp.first;
+        int tmpIndex = tmp.second;
+        
+        if (tmpIndex < 0) {
+            if (tmpIndex < left) {
+                res += tmpNode->value;
+                left = tmpIndex;
+            }
+        }
+        else if (tmpIndex > 0) {
+            if (tmpIndex > right) {
+                res += tmpNode->value;
+                right = tmpIndex;
+            }
+        }
+        if (!tmpNode->left) que.push(make_pair(tmpNode->left, tmpIndex - 1));
+        if (!tmpNode->right) que.push(make_pair(tmpNode->right, tmpIndex + 1));
+    }
+    return res;
+}
+
+int main()
+{
+    string str;
+    cin >> str;
+    int n = str.size();
+    int tmp;
+    stack<int> stk;
+    int num = 0;
+    for (char ch : str)
+    {
+        if (ch == '[') 
+            stk.push(-1);
+        else if (ch == ']') {
+            int x = 0;
+            while (stk.top() != -1) { // 如果栈顶是[ ： 把之前的数加起来再+1；否则直接push1
+                tmp = stk.top();
+                stk.pop();
+                x += tmp;
+            }
+            stk.pop();
+            stk.push(x + 1);
+        }
+        else {
+            tmp = stk.top();
+            stk.pop();
+            stk.push(tmp*(ch - '0'));
+        }
+    }
+    while (!stk.empty()) {
+        num += stk.top();
+        stk.pop();
+    }
+    cout << num;
+  
+    return 0;
+}
