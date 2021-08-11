@@ -1,0 +1,62 @@
+对于由{[()]}构成的字符串，请检测是否合法，要求1) 字符串中的左括号必须有匹配的右括号
+，反之亦然, 即())和(()均为不合法 2）字符串中符合优先级顺序{} >[] >(), 优先级低的符号中
+不可包含优先级高的符号，即([])为不合法；
+一个合法的字符串样例(()){[()()][[()]]}[]{[]} 
+
+bool judge(const string& inputStr) {
+    if (inputStr.size() < 2)
+        return false;
+    stack<char> charStack;
+    map<char, int> charMap = { {'(', 1}, {'[',2 },{'{',3 } };
+    char curBefore = -1;
+    for (int i = 0; i < inputStr.size(); i++) {
+        if (inputStr[i] == '(' || inputStr[i] == '[' || inputStr[i] == '{') {
+            if (!charStack.empty()) {
+                curBefore = charMap[charStack.top()];
+            }
+            else {
+                curBefore = charMap[inputStr[i]];
+            }
+            if (charMap[inputStr[i]] > curBefore) {
+                return false;
+            }
+            else {
+                charStack.push(inputStr[i]);
+            }
+        }
+        else {
+            if (charStack.empty()) {
+                return false;
+            }
+            
+            char ch = charStack.top();
+            charStack.pop();
+            
+            if (inputStr[i] == ')') {
+                if (ch == '{' || ch == '[') {
+                    return false;
+                }
+            }
+            else if (inputStr[i] == ']') {
+                if (ch == '{' || ch == '(') {
+                    return false;
+                }
+            }
+            else {
+                if (ch == '[' || ch == '(') {
+                    return false;
+                }
+            }
+        }
+    }
+    if (!charStack.empty()) {
+        return false;
+    }
+    return true;
+}
+
+int main() {
+    string testStr ="(()){[()()][[()]]}[]{[]}" ;// "(())""[()]" "())" "(()){[()()][[()]]}[]{[]}"
+    cout << judge(testStr) << endl;
+    return 0;
+}
