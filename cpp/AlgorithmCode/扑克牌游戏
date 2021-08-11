@@ -1,0 +1,35 @@
+int main() {
+    int t; cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        map<int, int> card;
+        int tmp;
+        for (int i = 0; i < n; i++) {
+            int tmp;
+            cin >> tmp;
+            if (card.count(tmp)) {
+                card[tmp]++;
+            }
+            else {
+                card[tmp] = 1;
+            }
+        }
+        if (card.size() != 2) {
+            cout << "NO" << endl;
+            continue;
+        }
+        int cnt = 0;
+        for (auto i : card) {
+            cnt += i.second;
+        }
+        if (cnt == n && card[0]==card[1]) {
+            cout << "YES" << endl;
+        }
+        else {
+            cout << "NO" << endl;
+        }
+    }
+
+    return 0;
+}
